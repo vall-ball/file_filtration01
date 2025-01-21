@@ -67,7 +67,6 @@ public class FileHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(currentPath);
 		if (path.length() == 0) {
 			path = currentPath;
 		}
