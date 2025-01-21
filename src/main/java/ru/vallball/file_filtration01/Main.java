@@ -1,13 +1,11 @@
 package ru.vallball.file_filtration01;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-	public static void main(String[] args) {
-		/*for (String s : args) {
-			System.out.println(s);
-		}*/
+	public static void main(String[] args) throws IOException {
 		List<String> namesOfFiles = new ArrayList<>();
 		String path = "";
 		String prefix = "";
@@ -46,5 +44,16 @@ public class Main {
 				i++;
 			}
 		}
+		
+		List<String> files = FileHandler.readFiles(namesOfFiles);
+		for (String s : files) {
+			System.out.println(s);
+		}
+		System.out.println("------------------------");
+		List<String> content = FileHandler.contentProcessing(files);
+		for (String s : content) {
+			System.out.println(s);
+		}
+		FileHandler.writeFiles(content, path, prefix, appendable, fullStatistics, shortStatistics);
 	}
 }
