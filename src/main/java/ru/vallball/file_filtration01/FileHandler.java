@@ -46,8 +46,9 @@ public class FileHandler {
 		}
 		return answer;
 	}
-	
-	public static void writeFiles(List<String> contentOfFiles, String path, String prefix, boolean appendable, boolean fullStatistics, boolean shortStatistics) {
+
+	public static void writeFiles(List<String> contentOfFiles, String path, String prefix, boolean appendable,
+			boolean fullStatistics, boolean shortStatistics) {
 		int quantityOfIntegers = 0;
 		int quantityOfFloats = 0;
 		int quantityOfStrings = 0;
@@ -59,7 +60,17 @@ public class FileHandler {
 		float sumOfFloats = 0;
 		int minLength = Integer.MAX_VALUE;
 		int maxLength = 0;
-		
+		String currentPath = "";
+		try {
+			currentPath = new java.io.File(".").getCanonicalPath();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(currentPath);
+		if (path.length() == 0) {
+			path = currentPath;
+		}
 		if (!appendable) {
 			if (Files.exists(Paths.get(path + "\\" + prefix + "integers.txt"))) {
 				try {
@@ -90,7 +101,7 @@ public class FileHandler {
 		Path floats = null;
 		Path strings = null;
 		for (String s : contentOfFiles) {
-			if (s.matches("0|-?[1-9][0-9]*")) {	
+			if (s.matches("0|-?[1-9][0-9]*")) {
 				if (!Files.exists(Paths.get(path + "\\" + prefix + "integers.txt"))) {
 					try {
 						integers = Files.createFile(Paths.get(path + "\\" + prefix + "integers.txt"));
@@ -107,7 +118,12 @@ public class FileHandler {
 					e.printStackTrace();
 				}
 				quantityOfIntegers++;
-				long a = Long.parseLong(s);
+				long a = 0;
+				try {
+					a = Long.parseLong(s);
+				} catch (NumberFormatException e) {
+					System.out.println("This number is too big " + s);
+				}
 				if (a < minInt) {
 					minInt = a;
 				}
@@ -115,7 +131,7 @@ public class FileHandler {
 					maxInt = a;
 				}
 				sumOfIntegers += a;
-			} else if (s.matches("-?(0|[1-9][0-9]*)\\.[0-9]+(E(\\+|-)[1-9][0-9]*)?")) {
+			} else if (s.matches("-?(0|[1-9][0-9]*)\\.[0-9]+((E|e)(\\+|-)[1-9][0-9]*)?")) {
 				if (!Files.exists(Paths.get(path + "\\" + prefix + "floats.txt"))) {
 					try {
 						floats = Files.createFile(Paths.get(path + "\\" + prefix + "floats.txt"));
@@ -132,7 +148,12 @@ public class FileHandler {
 					e.printStackTrace();
 				}
 				quantityOfFloats++;
-				float a = Float.parseFloat(s);
+				float a = 0;
+				try {
+					a = Float.parseFloat(s);
+				} catch (NumberFormatException e) {
+					System.out.println("This number is too big " + s);
+				}
 				if (a < minFloat) {
 					minFloat = a;
 				}
@@ -163,27 +184,32 @@ public class FileHandler {
 				if (s.length() > maxLength) {
 					maxLength = s.length();
 				}
-			}		
+			}
 		}
 		if (fullStatistics) {
 			if (quantityOfIntegers != 0) {
-				System.out.println("There were "  + quantityOfIntegers + " integers written down. Maximum = " + maxInt + ". Minimum = " + minInt + ". Sum = " + sumOfIntegers + ". Average = " + (0.0 + sumOfIntegers / quantityOfIntegers) + ".");
+				System.out.println("There were " + quantityOfIntegers + " integers written down. Maximum = " + maxInt
+						+ ". Minimum = " + minInt + ". Sum = " + sumOfIntegers + ". Average = "
+						+ (0.0 + sumOfIntegers / quantityOfIntegers) + ".");
 			}
 			if (quantityOfFloats != 0) {
-				System.out.println("There were "  + quantityOfFloats + " floats written down. Maximum = " + maxFloat + ". Minimum = " + minFloat + ". Sum = " + sumOfFloats + ". Average = " + (sumOfFloats / quantityOfFloats) + ".");
+				System.out.println("There were " + quantityOfFloats + " floats written down. Maximum = " + maxFloat
+						+ ". Minimum = " + minFloat + ". Sum = " + sumOfFloats + ". Average = "
+						+ (sumOfFloats / quantityOfFloats) + ".");
 			}
 			if (quantityOfStrings != 0) {
-				System.out.println("There were "  + quantityOfStrings + " strings written down. Maximum length= " + maxLength + ". Minimum length = " + minLength + ".");
+				System.out.println("There were " + quantityOfStrings + " strings written down. Maximum length= "
+						+ maxLength + ". Minimum length = " + minLength + ".");
 			}
 		} else if (shortStatistics) {
 			if (quantityOfIntegers != 0) {
-				System.out.println("There were "  + quantityOfIntegers + " integers written down.");
+				System.out.println("There were " + quantityOfIntegers + " integers written down.");
 			}
 			if (quantityOfFloats != 0) {
-				System.out.println("There were "  + quantityOfFloats + " floats written down.");
+				System.out.println("There were " + quantityOfFloats + " floats written down.");
 			}
 			if (quantityOfStrings != 0) {
-				System.out.println("There were "  + quantityOfStrings + " strings written down.");
+				System.out.println("There were " + quantityOfStrings + " strings written down.");
 			}
 		}
 	}

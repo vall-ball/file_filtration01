@@ -46,14 +46,7 @@ public class Main {
 		}
 		
 		List<String> files = FileHandler.readFiles(namesOfFiles);
-		for (String s : files) {
-			System.out.println(s);
-		}
-		System.out.println("------------------------");
 		List<String> content = FileHandler.contentProcessing(files);
-		for (String s : content) {
-			System.out.println(s);
-		}
 		FileHandler.writeFiles(content, path, prefix, appendable, fullStatistics, shortStatistics);
 	}
 }
